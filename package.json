@@ -1,0 +1,24 @@
+{
+  "name": "proyect_backend",
+  "version": "1.0.0",
+  "description": "segundo proyecto parcial",
+  "main": "server.js",
+  "scripts": {
+    "server": "nodemon proyect_backend/server.js",
+    "start": "node server.js"
+  },
+  "author": "luis leonardo xicotencatl guzman",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "moongose": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
