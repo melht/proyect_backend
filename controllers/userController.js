@@ -68,9 +68,43 @@ const showdata = asyncHandler(async(req, res)=>{
     res.status(200).json({message: 'mis datos'})
 
 })
+const updateUsuario = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    // Only allow updates to specific fields
+    const updates = {};
+    if (req.body.name) updates.name = req.body.name;
+    if (req.body.email) updates.email = req.body.email;
+
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
+
+    res.status(200).json({
+        message: `User ${req.params.id} updated successfully`,
+        data: updatedUser
+    });
+});
+
+const deleteUsuario = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    await User.deleteOne({ _id: req.params.id });
+
+    res.status(200).json({ id: req.params.id, message: 'User deleted successfully' });
+});
 
 module.exports = {
     registrar, 
     login,
-    showdata
+    showdata,
+    updateUsuario,
+    deleteUsuario
 }
