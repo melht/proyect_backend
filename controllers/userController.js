@@ -76,10 +76,11 @@ const updateUsuario = asyncHandler(async (req, res) => {
         throw new Error('User not found');
     }
 
-    // Only allow updates to specific fields
+   
     const updates = {};
     if (req.body.name) updates.name = req.body.name;
     if (req.body.email) updates.email = req.body.email;
+    if (req.body.isAdmin) updates.isAdmin = req.body.isAdmin;
 
     const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
 

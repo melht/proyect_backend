@@ -6,10 +6,10 @@ const horoscoposController = require('../controllers/HoroscopoController');
 router.get('/', horoscoposController.getAllHoroscopos);
 
 // Obtener un horóscopo por su ID
-router.get('/:id', horoscoposController.getHoroscopoById);
+router.get('/:signo', horoscoposController.getHoroscopoBySigno);
 
 // Crear un nuevo horóscopo
-router.post('/', horoscoposController.createHoroscopo);
+router.post('/crearhoroscopo', horoscoposController.createHoroscopo);
 
 // Actualizar un horóscopo existente
 router.put('/:id', horoscoposController.updateHoroscopo);

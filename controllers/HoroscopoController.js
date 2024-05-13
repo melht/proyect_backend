@@ -11,9 +11,10 @@ const getAllHoroscopos = asyncHandler(async (req, res) => {
   }
 });
 
-// Obtener un horóscopo por su ID
-const getHoroscopoById = asyncHandler(async (req, res) => {
-  const horoscopo = await Horoscopo.findById(req.params.id);
+// Obtener un horóscopo por su signo
+const getHoroscopoBySigno = asyncHandler(async (req, res) => {
+  const horoscopo = await Horoscopo.findOne({ signo: req.params.signo });
+
   if (horoscopo) {
     res.json(horoscopo);
   } else {
@@ -21,14 +22,25 @@ const getHoroscopoById = asyncHandler(async (req, res) => {
   }
 });
 
+
 // Crear un nuevo horóscopo
 const createHoroscopo = asyncHandler(async (req, res) => {
-  const horoscopo = new Horoscopo({
-    signo: req.body.signo,
-    contenido: req.body.contenido
-  });
   try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.idusuario);
+
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({ message: 'Acceso denegado. Solo los administradores pueden crear horóscopos.' });
+    }
+
+    const horoscopo = new Horoscopo({
+      signo: req.body.signo,
+      contenido: req.body.contenido
+    });
+
     const newHoroscopo = await horoscopo.save();
+
     res.status(201).json(newHoroscopo);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -62,7 +74,7 @@ const deleteHoroscopo = asyncHandler(async (req, res) => {
 
 module.exports = {
   getAllHoroscopos,
-  getHoroscopoById,
+  getHoroscopoBySigno,
   createHoroscopo,
   updateHoroscopo,
   deleteHoroscopo
