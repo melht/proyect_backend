@@ -64,10 +64,11 @@ const login =asyncHandler(async (req, res) => {
     }
 })
 
-const showdata = asyncHandler(async(req, res)=>{
-    res.status(200).json({message: 'mis datos'})
+const showdata = asyncHandler(async(req, res) => {
+    const users = await User.find({});
+    res.status(200).json(users);
+});
 
-})
 const updateUsuario = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
 
