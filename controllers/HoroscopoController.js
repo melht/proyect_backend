@@ -1,7 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const Horoscopo = require('../models/HoroscopoModels');
+const jwt = require('jsonwebtoken');
+const User = require('../models/userModels');
 
-// Obtener todos los horóscopos
 const getAllHoroscopos = asyncHandler(async (req, res) => {
   try {
     const horoscopos = await Horoscopo.find();
@@ -11,7 +12,6 @@ const getAllHoroscopos = asyncHandler(async (req, res) => {
   }
 });
 
-// Obtener un horóscopo por su signo
 const getHoroscopoBySigno = asyncHandler(async (req, res) => {
   const horoscopo = await Horoscopo.findOne({ signo: req.params.signo });
 
@@ -23,12 +23,17 @@ const getHoroscopoBySigno = asyncHandler(async (req, res) => {
 });
 
 
-// Crear un nuevo horóscopo
 const createHoroscopo = asyncHandler(async (req, res) => {
   try {
+    // Check if Authorization header exists
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer')) {
+      return res.status(401).json({ message: 'Acceso no autorizado, token no proporcionado' });
+    }
+
+    // Split the Authorization header
     const token = req.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await user.findById(decoded.idusuario);
+    const user = await User.findById(decoded.idusuario);
 
     if (!user || !user.isAdmin) {
       return res.status(403).json({ message: 'Acceso denegado. Solo los administradores pueden crear horóscopos.' });
@@ -47,7 +52,7 @@ const createHoroscopo = asyncHandler(async (req, res) => {
   }
 });
 
-// Actualizar un horóscopo existente
+
 const updateHoroscopo = asyncHandler(async (req, res) => {
   const { signo, contenido } = req.body;
   const horoscopo = await Horoscopo.findById(req.params.id);
@@ -61,7 +66,6 @@ const updateHoroscopo = asyncHandler(async (req, res) => {
   }
 });
 
-// Eliminar un horóscopo existente
 const deleteHoroscopo = asyncHandler(async (req, res) => {
   const horoscopo = await Horoscopo.findById(req.params.id);
   if (horoscopo) {
@@ -79,3 +83,4 @@ module.exports = {
   updateHoroscopo,
   deleteHoroscopo
 };
+
