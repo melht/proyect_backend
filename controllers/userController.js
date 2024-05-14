@@ -12,10 +12,10 @@ const generarToken = (idusuario) => {
 
 const registrar = asyncHandler(async(req,res) => {
     //desestrcutrar un objeto
-    const {name, email, password,birthday} = req.body
+    const {name, email, password,signo} = req.body
 
     //verificar el paso de los datos
-    if(!name || !email ||!password|| !birthday){
+    if(!name || !email ||!password|| !signo){
         res.status(400)
         throw new Error('FALTAN DATOS ')
     }
@@ -36,7 +36,7 @@ const registrar = asyncHandler(async(req,res) => {
         name,
         email,
         password: hashedPassword,
-        birthday
+        signo
 
     })
 

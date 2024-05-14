@@ -16,9 +16,9 @@ const userSchema = new mongoose.Schema({
         required: [true, "Por favor teclea tu contraseña"],
         minlength: [6, "La contraseña debe tener al menos 6 caracteres"]
     },
-    birthday: {
-        type: Date,
-        required: [true, "Por favor teclea tu fecha de nacimiento"] 
+    signo: {
+        type: string,
+        required: [true, "Por favor teclea tu signo Zodiacal"] 
     },
     isAdmin: {
         type: Boolean,
